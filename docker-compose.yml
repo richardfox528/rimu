@@ -1,0 +1,13 @@
+services:
+  web:
+    build: ./backend
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./backend:/code
+    environment:
+      - DJANGO_SETTINGS_MODULE=voxlyne.settings
+  frontend:
+    build: ./frontend/src
+    ports:
+      - "3000:80"

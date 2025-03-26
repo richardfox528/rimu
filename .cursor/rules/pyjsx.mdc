@@ -1,0 +1,81 @@
+---
+description: Mejores practicas de codiiii
+globs: 
+alwaysApply: true
+---
+
+Before diving into the best practices, please note that you may need to adapt the globs depending on your specific project structure.
+
+---
+name: django-best-practices.mdc
+description: Best practices for Django web framework development
+globs: **/*.py
+---
+
+- Use Django's ORM for database operations
+- Implement proper URL routing and views
+- Utilize Django's built-in authentication system
+- Follow Django's naming conventions for models and migrations
+
+---
+name: reactjs-best-practices.mdc
+description: Best practices for React.js component development
+globs: **/*.{js,jsx,ts,tsx}
+---
+
+- Use functional components with hooks
+- Implement proper state management (e.g., Redux, Context API)
+- Follow React's one-way data flow principle
+- Use PropTypes or TypeScript for prop type checking
+
+---
+name: python-best-practices.mdc
+description: Best practices for Python coding standards
+globs: **/*.py
+---
+
+- Follow PEP 8 style guide
+- Use type hints for better code readability
+- Implement proper error handling with try-except blocks
+- Utilize virtual environments for dependency management
+
+---
+name: docstrings-best-practices.mdc
+description: Guidelines for writing effective Python docstrings
+globs: **/*.py
+---
+
+- Use Google style or NumPy style for docstrings
+- Include descriptions for all parameters and return values
+- Provide examples of usage when appropriate
+- Keep docstrings concise yet informative
+
+---
+name: tailwind-best-practices.mdc
+description: Best practices for using Tailwind CSS
+globs: **/*.{js,jsx,ts,tsx,css}
+---
+
+- Use utility-first approach for styling
+- Implement responsive design using Tailwind's breakpoints
+- Utilize Tailwind's custom configuration for project-specific styles
+- Optimize CSS output with Tailwind's purge feature
+
+---
+name: english-code-comments-html.mdc
+description: Rule to ensure all code, docstrings, comments and HTML elements contain information in English
+globs: **/*.{py,js,jsx,ts,tsx,html,css,scss,md}
+---
+
+- Write all code comments in English
+- Create docstrings in English following standard formats (Google, NumPy, etc.)
+- Use English for all HTML content elements (<p>, <label>, <h1>, etc.)
+- Provide English descriptions for variables, functions, and classes
+- Include English text for UI elements and user-facing content
+- Use English for database field names and descriptions
+- Write log messages and debug information in English
+- Keep code naming conventions in English (camelCase, snake_case, etc.)
+- Format all terminal commands using PowerShell syntax
+- Always activate the virtual environment before running any Python commands
+- Include the virtual environment activation command in all code examples
+- Use PowerShell integrated terminal for all command execution examples

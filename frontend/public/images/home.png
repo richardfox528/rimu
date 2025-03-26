@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="600" viewBox="0 0 800 600">
+  <defs>
+    <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#007bff;stop-opacity:0.8" />
+      <stop offset="100%" style="stop-color:#0056b3;stop-opacity:0.9" />
+    </linearGradient>
+  </defs>
+  <rect width="800" height="600" fill="#f8f9fa" />
+  <g transform="translate(400,300)">
+    <rect x="-300" y="-200" width="600" height="400" rx="20" ry="20" fill="white" stroke="#e6e6e6" stroke-width="2" />
+    <rect x="-280" y="-180" width="560" height="100" rx="10" ry="10" fill="url(#grad1)" />
+    <text x="0" y="-130" font-family="Arial" font-size="24" fill="white" text-anchor="middle">Professional Document Management</text>
+    
+    <!-- Document Icons -->
+    <g transform="translate(-200,-30)">
+      <rect x="-40" y="-40" width="80" height="100" rx="5" ry="5" fill="#f8f9fa" stroke="#007bff" stroke-width="2" />
+      <line x1="-25" y1="-20" x2="25" y2="-20" stroke="#6c757d" stroke-width="2" />
+      <line x1="-25" y1="0" x2="25" y2="0" stroke="#6c757d" stroke-width="2" />
+      <line x1="-25" y1="20" x2="15" y2="20" stroke="#6c757d" stroke-width="2" />
+    </g>
+    
+    <g transform="translate(0,-30)">
+      <rect x="-40" y="-40" width="80" height="100" rx="5" ry="5" fill="#f8f9fa" stroke="#28a745" stroke-width="2" />
+      <line x1="-25" y1="-20" x2="25" y2="-20" stroke="#6c757d" stroke-width="2" />
+      <line x1="-25" y1="0" x2="25" y2="0" stroke="#6c757d" stroke-width="2" />
+      <line x1="-25" y1="20" x2="15" y2="20" stroke="#6c757d" stroke-width="2" />
+      <circle cx="30" cy="30" r="15" fill="#28a745" />
+      <path d="M25,30 L30,35 L40,25" stroke="white" stroke-width="2" fill="none" />
+    </g>
+    
+    <g transform="translate(200,-30)">
+      <rect x="-40" y="-40" width="80" height="100" rx="5" ry="5" fill="#f8f9fa" stroke="#17a2b8" stroke-width="2" />
+      <line x1="-25" y1="-20" x2="25" y2="-20" stroke="#6c757d" stroke-width="2" />
+      <line x1="-25" y1="0" x2="25" y2="0" stroke="#6c757d" stroke-width="2" />
+      <line x1="-25" y1="20" x2="15" y2="20" stroke="#6c757d" stroke-width="2" />
+      <circle cx="30" cy="-30" r="15" fill="#17a2b8" />
+      <text x="30" y="-25" font-family="Arial" font-size="20" fill="white" text-anchor="middle">i</text>
+    </g>
+    
+    <!-- Connection Lines -->
+    <path d="M-160,70 C-160,100 -80,120 0,120 C80,120 160,100 160,70" stroke="#007bff" stroke-width="2" fill="none" stroke-dasharray="5,5" />
+    
+    <!-- Bottom Text -->
+    <text x="0" y="150" font-family="Arial" font-size="18" fill="#343a40" text-anchor="middle">Secure · Accessible · Verifiable</text>
+  </g>
+</svg>

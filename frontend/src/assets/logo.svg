@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="83 46 134 151">
+  <!-- Hexágono representando blockchain -->
+  <polygon points="150,50 217,83 217,150 150,183 83,150 83,83" fill="none" stroke="rgb(79,70,229)"
+    stroke-width="6" />
+
+  <!-- Basic connection lines (blockchain) -->
+  <line x1="150" y1="50" x2="150" y2="183" stroke="rgb(79,70,229)" stroke-width="3" />
+  <line x1="83" y1="83" x2="217" y2="83" stroke="rgb(79,70,229)" stroke-width="3" />
+  <line x1="83" y1="150" x2="217" y2="150" stroke="rgb(79,70,229)" stroke-width="3" />
+
+  <!-- Upper line modified for 3D effect -->
+  <line x1="83" y1="83" x2="150" y2="50" stroke="rgb(79,70,229)" stroke-width="3" />
+  <line x1="150" y1="50" x2="217" y2="83" stroke="rgb(79,70,229)" stroke-width="3" />
+
+  <!-- Documento representado como una hoja de papel -->
+  <rect x="115" y="105" width="70" height="90" fill="#ffffff" stroke="#34495e" stroke-width="3"
+    rx="5" ry="5" />
+
+  <!-- Text lines in the document -->
+  <line x1="125" y1="125" x2="175" y2="125" stroke="#34495e" stroke-width="2" />
+  <line x1="125" y1="140" x2="175" y2="140" stroke="#34495e" stroke-width="2" />
+  <line x1="125" y1="155" x2="175" y2="155" stroke="#34495e" stroke-width="2" />
+  <line x1="125" y1="170" x2="160" y2="170" stroke="#34495e" stroke-width="2" />
+
+  <!-- Pequeño nodo de blockchain en el documento -->
+  <circle cx="150" cy="190" r="5" fill="rgb(79,70,229)" />
+</svg>
