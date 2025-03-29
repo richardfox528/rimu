@@ -26,24 +26,34 @@ const RegisterForm = ({ onRegister }) => {
   const { register } = useAuth();
 
   const handlePhoneChange = (value, country) => {
-    // Update phone-related fields in formData
+    // Update only country code when country changes
     setFormData((prev) => ({
       ...prev,
-      phone_number: value, // Full number with country code
       country_code: `+${country.dialCode}`,
-      phone_number_national: value.substring(country.dialCode.length),
     }));
 
     // Clear field-specific errors
-    if (
-      fieldErrors.phone_number ||
-      fieldErrors.country_code ||
-      fieldErrors.phone_number_national
-    ) {
+    if (fieldErrors.country_code) {
       setFieldErrors((prev) => ({
         ...prev,
-        phone_number: "",
         country_code: "",
+      }));
+    }
+  };
+
+  const handlePhoneNumberChange = (e) => {
+    const { value } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      phone_number_national: value,
+      // Combine country code and national number for the full phone number
+      phone_number: `${prev.country_code}${value}`,
+    }));
+
+    // Clear field-specific errors
+    if (fieldErrors.phone_number_national) {
+      setFieldErrors((prev) => ({
+        ...prev,
         phone_number_national: "",
       }));
     }
@@ -354,41 +364,73 @@ const RegisterForm = ({ onRegister }) => {
         </div>
 
         <div>
-          <label htmlFor="phone_number" className="form-label">
+          <label htmlFor="country_code" className="form-label">
             Phone Number
           </label>
-          <PhoneInput
-            country={"es"}
-            value={formData.phone_number}
-            onChange={handlePhoneChange}
-            inputProps={{
-              name: "phone_number",
-              id: "phone_number",
-              required: false,
-              autoComplete: "tel",
-            }}
-            containerClass="react-tel-input"
-            dropdownClass="country-dropdown"
-            searchClass="search-box"
-            containerStyle={{ width: "100%" }}
-            inputStyle={{
-              width: "100%",
-              height: "42px",
-              fontSize: "16px",
-              borderRadius: "0.375rem",
-              borderColor: fieldErrors.phone_number ? "#ef4444" : "#D1D5DB",
-            }}
-            buttonStyle={{
-              backgroundColor: "transparent",
-              borderColor: fieldErrors.phone_number ? "#ef4444" : "#D1D5DB",
-              borderRadius: "0.375rem 0 0 0.375rem",
-            }}
-            enableSearch={true}
-            disableSearchIcon={false}
-          />
-          {fieldErrors.phone_number && (
+          <div className="flex gap-2">
+            <div className="w-1/3">
+              <PhoneInput
+                country={"co"}
+                value={formData.country_code}
+                onChange={handlePhoneChange}
+                inputProps={{
+                  name: "country_code",
+                  id: "country_code",
+                  required: false,
+                  readOnly: true,
+                  className: "cursor-pointer",
+                  style: {
+                    width: "50%",
+                    height: "42px",
+                    fontSize: "16px",
+                    paddingLeft: "48px", // Espacio para la bandera
+                    backgroundColor: "#F9FAFB",
+                    border: fieldErrors.country_code ? "1px solid #ef4444" : "1px solid #D1D5DB",
+                    borderRadius: "0.375rem",
+                    cursor: "pointer"
+                  }
+                }}
+                containerClass="react-tel-input"
+                dropdownClass="country-dropdown"
+                searchClass="search-box"
+                containerStyle={{
+                  width: "100%"
+                }}
+                buttonStyle={{
+                  backgroundColor: "#F9FAFB",
+                  border: fieldErrors.country_code ? "1px solid #ef4444" : "1px solid #D1D5DB",
+                  borderRight: "none",
+                  borderRadius: "0.375rem 0 0 0.375rem",
+                  cursor: "pointer"
+                }}
+                enableSearch={true}
+                disableSearchIcon={false}
+                specialLabel=""
+                displayFormat="+# "
+                preferredCountries={['co', 'us', 'es']}
+                searchPlaceholder="Search country..."
+              />
+            </div>
+            <div className="w-2/3">
+              <input
+                type="tel"
+                id="phone_number_national"
+                name="phone_number_national"
+                value={formData.phone_number_national}
+                onChange={handlePhoneNumberChange}
+                placeholder="321456111"
+                className={`form-control w-full h-[42px] ${
+                  fieldErrors.phone_number_national ? "border-red-500" : "border-gray-300"
+                } bg-white focus:ring-indigo-500 focus:border-indigo-500`}
+                pattern="[0-9]{6,15}"
+                title="Phone number should be between 6 and 15 digits"
+                autoComplete="tel"
+              />
+            </div>
+          </div>
+          {(fieldErrors.country_code || fieldErrors.phone_number_national) && (
             <p className="text-red-500 text-xs mt-1">
-              {fieldErrors.phone_number}
+              {fieldErrors.country_code || fieldErrors.phone_number_national}
             </p>
           )}
         </div>
