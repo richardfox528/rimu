@@ -6,6 +6,7 @@ import Testimonials from "../components/Testimonials";
 import Features from "../components/Features";
 import Stats from "../components/Stats";
 import FAQ from "../components/FAQ";
+import GridPattern from '../components/GridPattern';
 
 const Home = () => {
   const { user } = useAuth();
@@ -83,7 +84,7 @@ const Home = () => {
       {/* Hero Section */}
       <section className="relative pt-20 pb-40 overflow-hidden">
         {/* Background elements */}
-        <div className="absolute inset-0 bg-[url('/images/grid-pattern.svg')] opacity-10"></div>
+        <GridPattern className="opacity-10" />
         <div className="absolute top-0 right-0 w-full h-full bg-gradient-to-bl from-primary/30 via-transparent to-transparent"></div>
         <div className="absolute bottom-0 left-0 w-full h-full bg-gradient-to-tr from-primary-dark/40 via-transparent to-transparent"></div>
 
@@ -291,7 +292,7 @@ const Home = () => {
 
       {/* Testimonials Section (with gradient background) */}
       <section className="bg-gradient-to-b from-slate-800 to-slate-900 relative z-10">
-        <div className="absolute inset-0 bg-[url('/images/grid-pattern.svg')] opacity-5"></div>
+        <GridPattern className="opacity-5" />
         <Testimonials testimonials={testimonials} currentIndex={currentIndex} />
       </section>
 
@@ -302,7 +303,7 @@ const Home = () => {
 
       {/* CTA Section */}
       <section className="relative py-24 bg-slate-900 overflow-hidden">
-        <div className="absolute inset-0 bg-[url('/images/grid-pattern.svg')] opacity-5"></div>
+        <GridPattern className="opacity-5" />
         <div className="absolute -top-40 -right-40 w-80 h-80 bg-primary/30 rounded-full filter blur-3xl"></div>
         <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-yellow-400/20 rounded-full filter blur-3xl"></div>
 
