@@ -5,6 +5,8 @@ import "react-toastify/dist/ReactToastify.css";
 import Register from "./pages/Register";
 import CookieConsent from "./components/common/CookieConsent";
 import PoliticaCookies from "./pages/PoliticaCookies";
+import PrivacyPolicy from "./pages/PrivacyPolicy";
+import TermsOfService from "./pages/TermsOfService";
 
 // Context
 import { AuthProvider } from "./context/AuthContext";
@@ -30,6 +32,10 @@ import NewDocument from "./components/documents/NewDocument";
 // Profile components
 import Profile from "./components/profile/Profile";
 import EditProfile from "./components/profile/EditProfile";
+
+// Company profile components
+import CompanyProfile from "./components/profile/CompanyProfile";
+import CompanyEditProfile from "./components/profile/CompanyEditProfile";
 
 // Settings component
 import Settings from "./components/settings";
@@ -165,6 +171,15 @@ function App() {
             path="/company/settings"
             element={<PrivateRoute element={<Settings />} userType={1} />}
           />
+          <Route
+            path="/company/profile"
+            element={<PrivateRoute element={<CompanyProfile />} userType={1} />}
+          />
+          <Route
+            path="/company/profile/edit"
+            element={<PrivateRoute element={<CompanyEditProfile />} userType={1} />}
+          />
+          
 
           {/* Public pages */}
           <Route
@@ -205,6 +220,26 @@ function App() {
               <BaseLayout>
                 <React.Suspense fallback={<div>Loading...</div>}>
                   <PoliticaCookies />
+                </React.Suspense>
+              </BaseLayout>
+            }
+          />
+          <Route
+            path="/privacy-policy"
+            element={
+              <BaseLayout>
+                <React.Suspense fallback={<div>Loading...</div>}>
+                  <PrivacyPolicy />
+                </React.Suspense>
+              </BaseLayout>
+            }
+          />
+          <Route
+            path="/terms-of-service"
+            element={
+              <BaseLayout>
+                <React.Suspense fallback={<div>Loading...</div>}>
+                  <TermsOfService />
                 </React.Suspense>
               </BaseLayout>
             }

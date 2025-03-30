@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import axios from "axios";
 import { toast } from "react-toastify";
@@ -50,7 +50,6 @@ const EmailVerification = () => {
   const [userType, setUserType] = useState("");
   const [manualCode, setManualCode] = useState("");
   const [resendingEmail, setResendingEmail] = useState(false);
-  const [showDebugInfo, setShowDebugInfo] = useState(false);
   const [message, setMessage] = useState("Verificando tu correo electrónico...");
   const [resendTimer, setResendTimer] = useState(0);
   const [codeError, setCodeError] = useState("");
@@ -63,9 +62,6 @@ const EmailVerification = () => {
   const location = useLocation();
   const navigate = useNavigate();
 
-  // Debugging info
-  const [debugInfo, setDebugInfo] = useState({});
-
   // Agregar estado para mostrar mensaje de redirección
   const [redirecting, setRedirecting] = useState(false);
   const [redirectDestination, setRedirectDestination] = useState("");
@@ -74,33 +70,8 @@ const EmailVerification = () => {
   const SUCCESS_MESSAGE_TIMEOUT = 2000; // 2 segundos para mostrar el mensaje de éxito
   const REDIRECT_ANIMATION_TIMEOUT = 2000; // 2 segundos para la animación de redirección
 
-  // Función para obtener la clave de reCAPTCHA
-  const getRecaptchaKey = async (retryCount = 0) => {
-    try {
-      const response = await axios.get(getApiUrl("api/accounts/recaptcha-key/"));
-      setRecaptchaKey(response.data.key);
-    } catch (error) {
-      console.error("Error getting reCAPTCHA key:", error);
-      // Reintentar hasta 3 veces con un retraso exponencial
-      if (retryCount < 3) {
-        setTimeout(() => {
-          getRecaptchaKey(retryCount + 1);
-        }, Math.pow(2, retryCount) * 1000);
-      } else {
-        toast.error("No se pudo cargar la verificación de seguridad. Por favor, recarga la página.");
-      }
-    }
-  };
-
-  // Obtener la clave pública de reCAPTCHA del backend
-  useEffect(() => {
-    if (showCaptcha && !recaptchaKey) {
-      getRecaptchaKey();
-    }
-  }, [showCaptcha, recaptchaKey]);
-
   // Función para manejar la redirección
-  const handleRedirect = () => {
+  const handleRedirect = useCallback(() => {
     // Primero mostrar el mensaje de éxito
     setRedirecting(false);
 
@@ -135,62 +106,10 @@ const EmailVerification = () => {
         }
       }, REDIRECT_ANIMATION_TIMEOUT);
     }, SUCCESS_MESSAGE_TIMEOUT);
-  };
-
-  useEffect(() => {
-    // Obtener información del usuario de diferentes fuentes
-    const queryParams = new URLSearchParams(location.search);
-    const token = queryParams.get("token");
-    const queryUserId = queryParams.get("user_id") || queryParams.get("uid");
-    const queryEmail = queryParams.get("email");
-    const queryUserType = queryParams.get("user_type");
-
-    // Actualizar el estado con el email de la URL
-    if (queryEmail) {
-      setUserEmail(queryEmail);
-      // Guardar el email en una cookie para persistencia
-      Cookies.set('verificationEmail', queryEmail);
-    } else {
-      // Si no hay email en la URL, intentar obtenerlo de las cookies
-      const savedEmail = Cookies.get('verificationEmail');
-      if (savedEmail) {
-        setUserEmail(savedEmail);
-      }
-    }
-
-    // Actualizar el estado
-    setUserId(queryUserId || "");
-    setUserType(queryUserType || "");
-
-    // Actualizar información de depuración
-    const allParams = {};
-    for (const [key, value] of queryParams.entries()) {
-      allParams[key] = value;
-    }
-
-    setDebugInfo({
-      allParams,
-      token,
-      userId: queryUserId || "",
-      email: queryEmail || Cookies.get('verificationEmail') || "",
-      searchParams: location.search
-    });
-
-    // Si hay token, verificar automáticamente
-    if (token) {
-      setVerificationStatus("pending");
-      setMessage("Verificando tu correo electrónico...");
-
-      setTimeout(() => {
-        verifyEmailWithToken(token, queryUserId, queryEmail);
-      }, 500);
-    } else {
-      setVerificationStatus("waiting");
-    }
-  }, [location]);
+  }, [userType, navigate, setRedirecting, setRedirectDestination]);
 
   // Función para verificar el email con el token
-  const verifyEmailWithToken = async (token, userId, email) => {
+  const verifyEmailWithToken = useCallback(async (token, userId, email) => {
     try {
       // Primero ponemos el estado en pending para mostrar el spinner
       setVerificationStatus("pending");
@@ -260,7 +179,70 @@ const EmailVerification = () => {
         "Error: " + (error.response?.data?.error || "Error desconocido")
       );
     }
-  };
+  }, [setVerificationStatus, setMessage, setUserType, setErrorMessage, handleRedirect]);
+
+  // Función para obtener la clave de reCAPTCHA
+  const getRecaptchaKey = useCallback(async (retryCount = 0) => {
+    try {
+      const response = await axios.get(getApiUrl("api/accounts/recaptcha-key/"));
+      setRecaptchaKey(response.data.key);
+    } catch (error) {
+      console.error("Error getting reCAPTCHA key:", error);
+      // Reintentar hasta 3 veces con un retraso exponencial
+      if (retryCount < 3) {
+        setTimeout(() => {
+          getRecaptchaKey(retryCount + 1);
+        }, Math.pow(2, retryCount) * 1000);
+      } else {
+        toast.error("No se pudo cargar la verificación de seguridad. Por favor, recarga la página.");
+      }
+    }
+  }, []);
+
+  // Obtener la clave pública de reCAPTCHA del backend
+  useEffect(() => {
+    if (showCaptcha && !recaptchaKey) {
+      getRecaptchaKey();
+    }
+  }, [showCaptcha, recaptchaKey, getRecaptchaKey]);
+
+  useEffect(() => {
+    // Obtener información del usuario de diferentes fuentes
+    const queryParams = new URLSearchParams(location.search);
+    const token = queryParams.get("token");
+    const queryUserId = queryParams.get("user_id") || queryParams.get("uid");
+    const queryEmail = queryParams.get("email");
+    const queryUserType = queryParams.get("user_type");
+
+    // Actualizar el estado con el email de la URL
+    if (queryEmail) {
+      setUserEmail(queryEmail);
+      // Guardar el email en una cookie para persistencia
+      Cookies.set('verificationEmail', queryEmail);
+    } else {
+      // Si no hay email en la URL, intentar obtenerlo de las cookies
+      const savedEmail = Cookies.get('verificationEmail');
+      if (savedEmail) {
+        setUserEmail(savedEmail);
+      }
+    }
+
+    // Actualizar el estado
+    setUserId(queryUserId || "");
+    setUserType(queryUserType || "");
+
+    // Si hay token, verificar automáticamente
+    if (token) {
+      setVerificationStatus("pending");
+      setMessage("Verificando tu correo electrónico...");
+
+      setTimeout(() => {
+        verifyEmailWithToken(token, queryUserId, queryEmail);
+      }, 500);
+    } else {
+      setVerificationStatus("waiting");
+    }
+  }, [location, verifyEmailWithToken]);
 
   // Función para validar el formato del código
   const validateCode = (code) => {

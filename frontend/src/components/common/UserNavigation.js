@@ -78,25 +78,6 @@ const UserNavigation = () => {
                   Documents
                 </Link>
                 <Link
-                  to="/profile"
-                  className="text-white hover:bg-indigo-500 px-3 py-2 rounded-md text-sm font-medium flex items-center"
-                >
-                  <svg
-                    className="h-5 w-5 mr-2"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
-                    />
-                  </svg>
-                  Profile
-                </Link>
-                <Link
                   to="/user/settings"
                   className="text-white hover:bg-indigo-500 px-3 py-2 rounded-md text-sm font-medium flex items-center"
                 >
@@ -125,7 +106,10 @@ const UserNavigation = () => {
             </div>
           </div>
           <div className="flex items-center">
-            <span className="text-white mr-4 flex items-center">
+            <Link
+              to="/profile"
+              className="text-white mr-4 flex items-center hover:bg-indigo-500 px-3 py-2 rounded-md"
+            >
               <svg
                 className="h-5 w-5 mr-2"
                 fill="none"
@@ -140,7 +124,7 @@ const UserNavigation = () => {
                 />
               </svg>
               {user?.first_name || user?.username}
-            </span>
+            </Link>
             <button
               onClick={handleLogout}
               className="bg-indigo-700 hover:bg-indigo-800 text-white px-4 py-2 rounded-md text-sm font-medium flex items-center"

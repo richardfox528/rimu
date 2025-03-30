@@ -6,15 +6,18 @@ import DashboardLayout from "../layout/DashboardLayout";
 import { getApiUrl } from "../../utils/config.js";
 import { getCookie } from "../../utils/cookieUtils.js";
 
-const EditProfile = () => {
+const CompanyEditProfile = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [formData, setFormData] = useState({
-    first_name: "",
-    last_name: "",
+    company_name: "",
     email: "",
     username: "",
+    tax_id: "",
+    contact_person: "",
+    phone_number: "",
+    address: "",
   });
 
   useEffect(() => {
@@ -42,15 +45,26 @@ const EditProfile = () => {
           },
         }
       );
+
+      // Verify if the user is a company
+      if (response.data.user_type !== 1) {
+        toast.error("Unauthorized: This profile is only for company accounts");
+        navigate("/user-dashboard");
+        return;
+      }
+
       setFormData({
-        first_name: response.data.first_name || "",
-        last_name: response.data.last_name || "",
+        company_name: response.data.company_name || "",
         email: response.data.email || "",
         username: response.data.username || "",
+        tax_id: response.data.tax_id || "",
+        contact_person: response.data.contact_person || "",
+        phone_number: response.data.phone_number || "",
+        address: response.data.address || "",
       });
     } catch (error) {
       console.error("Profile fetch error:", error.response?.status, error.response?.data);
-      toast.error(error.response?.data?.detail || "Error loading profile");
+      toast.error(error.response?.data?.detail || "Error loading company profile");
     } finally {
       setLoading(false);
     }
@@ -88,8 +102,8 @@ const EditProfile = () => {
         }
       );
 
-      toast.success("Profile updated successfully");
-      navigate("/profile");
+      toast.success("Company profile updated successfully");
+      navigate("/company/profile");
     } catch (error) {
       console.error("Profile update error:", error.response?.status, error.response?.data);
       
@@ -101,16 +115,19 @@ const EditProfile = () => {
           toast.error(`Username error: ${errorData.username[0]}`);
         } else if (errorData.email) {
           toast.error(`Email error: ${errorData.email[0]}`);
+        } else if (errorData.company_name) {
+          toast.error(`Company name error: ${errorData.company_name[0]}`);
+        } else if (errorData.tax_id) {
+          toast.error(`Tax ID error: ${errorData.tax_id[0]}`);
         } else if (errorData.detail) {
           toast.error(errorData.detail);
         } else if (typeof errorData === 'string') {
           toast.error(errorData);
         } else {
-          // If no specific error message is found, show a generic one
-          toast.error("Error updating profile. Please try again.");
+          toast.error("Error updating company profile. Please try again.");
         }
       } else {
-        toast.error("Error updating profile. Please try again.");
+        toast.error("Error updating company profile. Please try again.");
       }
     } finally {
       setSaving(false);
@@ -119,69 +136,35 @@ const EditProfile = () => {
 
   if (loading) {
     return (
-      <DashboardLayout>
+      <DashboardLayout userType="company">
         <div className="flex justify-center items-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-indigo-500"></div>
+          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-emerald-500"></div>
         </div>
       </DashboardLayout>
     );
   }
 
   return (
-    <DashboardLayout>
+    <DashboardLayout userType="company">
       <div className="bg-white shadow-sm rounded-lg p-6">
-        <h1 className="text-2xl font-bold text-gray-900 mb-6">Edit Profile</h1>
+        <h1 className="text-2xl font-bold text-gray-900 mb-6">Edit Company Profile</h1>
 
         <form onSubmit={handleSubmit} className="space-y-6">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
               <label
-                htmlFor="first_name"
+                htmlFor="company_name"
                 className="block text-sm font-medium text-gray-700"
               >
-                First Name
+                Company Name
               </label>
               <input
                 type="text"
-                name="first_name"
-                id="first_name"
-                value={formData.first_name}
+                name="company_name"
+                id="company_name"
+                value={formData.company_name}
                 onChange={handleChange}
-                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
-              />
-            </div>
-
-            <div>
-              <label
-                htmlFor="last_name"
-                className="block text-sm font-medium text-gray-700"
-              >
-                Last Name
-              </label>
-              <input
-                type="text"
-                name="last_name"
-                id="last_name"
-                value={formData.last_name}
-                onChange={handleChange}
-                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
-              />
-            </div>
-
-            <div>
-              <label
-                htmlFor="email"
-                className="block text-sm font-medium text-gray-700"
-              >
-                Email
-              </label>
-              <input
-                type="email"
-                name="email"
-                id="email"
-                value={formData.email}
-                onChange={handleChange}
-                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500"
               />
             </div>
 
@@ -198,7 +181,92 @@ const EditProfile = () => {
                 id="username"
                 value={formData.username}
                 onChange={handleChange}
-                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500"
+              />
+            </div>
+
+            <div>
+              <label
+                htmlFor="email"
+                className="block text-sm font-medium text-gray-700"
+              >
+                Email
+              </label>
+              <input
+                type="email"
+                name="email"
+                id="email"
+                value={formData.email}
+                onChange={handleChange}
+                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500"
+              />
+            </div>
+
+            <div>
+              <label
+                htmlFor="tax_id"
+                className="block text-sm font-medium text-gray-700"
+              >
+                Tax ID / Business ID
+              </label>
+              <input
+                type="text"
+                name="tax_id"
+                id="tax_id"
+                value={formData.tax_id}
+                onChange={handleChange}
+                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500"
+              />
+            </div>
+
+            <div>
+              <label
+                htmlFor="contact_person"
+                className="block text-sm font-medium text-gray-700"
+              >
+                Contact Person
+              </label>
+              <input
+                type="text"
+                name="contact_person"
+                id="contact_person"
+                value={formData.contact_person}
+                onChange={handleChange}
+                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500"
+              />
+            </div>
+
+            <div>
+              <label
+                htmlFor="phone_number"
+                className="block text-sm font-medium text-gray-700"
+              >
+                Phone Number
+              </label>
+              <input
+                type="text"
+                name="phone_number"
+                id="phone_number"
+                value={formData.phone_number}
+                onChange={handleChange}
+                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500"
+              />
+            </div>
+
+            <div className="md:col-span-2">
+              <label
+                htmlFor="address"
+                className="block text-sm font-medium text-gray-700"
+              >
+                Address
+              </label>
+              <textarea
+                name="address"
+                id="address"
+                rows="3"
+                value={formData.address}
+                onChange={handleChange}
+                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500"
               />
             </div>
           </div>
@@ -206,7 +274,7 @@ const EditProfile = () => {
           <div className="flex justify-end space-x-4">
             <button
               type="button"
-              onClick={() => navigate("/profile")}
+              onClick={() => navigate("/company/profile")}
               className="bg-gray-100 text-gray-700 px-4 py-2 rounded-md hover:bg-gray-200 transition-colors"
             >
               Cancel
@@ -214,7 +282,7 @@ const EditProfile = () => {
             <button
               type="submit"
               disabled={saving}
-              className="bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700 transition-colors disabled:opacity-50"
+              className="bg-emerald-600 text-white px-4 py-2 rounded-md hover:bg-emerald-700 transition-colors disabled:opacity-50"
             >
               {saving ? "Saving..." : "Save Changes"}
             </button>
@@ -225,4 +293,4 @@ const EditProfile = () => {
   );
 };
 
-export default EditProfile;
+export default CompanyEditProfile; 
