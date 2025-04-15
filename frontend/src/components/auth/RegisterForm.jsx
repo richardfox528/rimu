@@ -374,13 +374,13 @@ const RegisterForm = ({ onRegister }) => {
                 value={formData.country_code}
                 onChange={handlePhoneChange}
                 inputProps={{
-                  name: "country_code",
-                  id: "country_code",
+                  name: "country-code",
+                  id: "country-code",
                   required: false,
                   readOnly: true,
                   className: "cursor-pointer",
                   style: {
-                    width: "50%",
+                    width: "90%",
                     height: "42px",
                     fontSize: "16px",
                     paddingLeft: "48px", // Espacio para la bandera

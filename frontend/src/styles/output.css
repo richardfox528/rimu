@@ -1900,6 +1900,11 @@ h3 {
   background-color: rgb(209 250 229 / var(--tw-bg-opacity, 1));
 }
 
+.bg-emerald-600 {
+  --tw-bg-opacity: 1;
+  background-color: rgb(5 150 105 / var(--tw-bg-opacity, 1));
+}
+
 .bg-emerald-700 {
   --tw-bg-opacity: 1;
   background-color: rgb(4 120 87 / var(--tw-bg-opacity, 1));
@@ -2077,11 +2082,6 @@ h3 {
 .bg-yellow-50 {
   --tw-bg-opacity: 1;
   background-color: rgb(254 252 232 / var(--tw-bg-opacity, 1));
-}
-
-.bg-emerald-600 {
-  --tw-bg-opacity: 1;
-  background-color: rgb(5 150 105 / var(--tw-bg-opacity, 1));
 }
 
 .bg-opacity-50 {
@@ -3024,6 +3024,11 @@ h3 {
   background-color: rgb(5 150 105 / var(--tw-bg-opacity, 1));
 }
 
+.hover\:bg-emerald-700:hover {
+  --tw-bg-opacity: 1;
+  background-color: rgb(4 120 87 / var(--tw-bg-opacity, 1));
+}
+
 .hover\:bg-emerald-900:hover {
   --tw-bg-opacity: 1;
   background-color: rgb(6 78 59 / var(--tw-bg-opacity, 1));
@@ -3120,11 +3125,6 @@ h3 {
 
 .hover\:bg-white\/50:hover {
   background-color: rgb(255 255 255 / 0.5);
-}
-
-.hover\:bg-emerald-700:hover {
-  --tw-bg-opacity: 1;
-  background-color: rgb(4 120 87 / var(--tw-bg-opacity, 1));
 }
 
 .hover\:text-emerald-700:hover {
