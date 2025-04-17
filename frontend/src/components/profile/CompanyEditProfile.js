@@ -21,54 +21,54 @@ const CompanyEditProfile = () => {
   });
 
   useEffect(() => {
-    fetchProfile();
-  }, []);
-
-  const fetchProfile = async () => {
-    try {
-      const token = localStorage.getItem("token") || getCookie("token");
-      
-      if (!token) {
-        toast.error("No authentication token found");
-        setLoading(false);
-        return;
-      }
-
-      console.log("Token found:", token ? "Yes" : "No");
-      
-      const response = await axios.get(
-        getApiUrl("api/accounts/user/info/"),
-        {
-          headers: { 
-            Authorization: `Bearer ${token}`,
-            'Content-Type': 'application/json',
-          },
+    const fetchProfile = async () => {
+      try {
+        const token = localStorage.getItem("token") || getCookie("token");
+        
+        if (!token) {
+          toast.error("No authentication token found");
+          setLoading(false);
+          return;
         }
-      );
 
-      // Verify if the user is a company
-      if (response.data.user_type !== 1) {
-        toast.error("Unauthorized: This profile is only for company accounts");
-        navigate("/user-dashboard");
-        return;
+        console.log("Token found:", token ? "Yes" : "No");
+        
+        const response = await axios.get(
+          getApiUrl("api/accounts/user/info/"),
+          {
+            headers: { 
+              Authorization: `Bearer ${token}`,
+              'Content-Type': 'application/json',
+            },
+          }
+        );
+
+        // Verify if the user is a company
+        if (response.data.user_type !== 1) {
+          toast.error("Unauthorized: This profile is only for company accounts");
+          navigate("/user-dashboard");
+          return;
+        }
+
+        setFormData({
+          company_name: response.data.company_name || "",
+          email: response.data.email || "",
+          username: response.data.username || "",
+          tax_id: response.data.tax_id || "",
+          contact_person: response.data.contact_person || "",
+          phone_number: response.data.phone_number || "",
+          address: response.data.address || "",
+        });
+      } catch (error) {
+        console.error("Profile fetch error:", error.response?.status, error.response?.data);
+        toast.error(error.response?.data?.detail || "Error loading company profile");
+      } finally {
+        setLoading(false);
       }
+    };
 
-      setFormData({
-        company_name: response.data.company_name || "",
-        email: response.data.email || "",
-        username: response.data.username || "",
-        tax_id: response.data.tax_id || "",
-        contact_person: response.data.contact_person || "",
-        phone_number: response.data.phone_number || "",
-        address: response.data.address || "",
-      });
-    } catch (error) {
-      console.error("Profile fetch error:", error.response?.status, error.response?.data);
-      toast.error(error.response?.data?.detail || "Error loading company profile");
-    } finally {
-      setLoading(false);
-    }
-  };
+    fetchProfile();
+  }, [navigate]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -102,8 +102,12 @@ const CompanyEditProfile = () => {
         }
       );
 
-      toast.success("Company profile updated successfully");
       navigate("/company/profile");
+      // Add delay before refresh to show the toast
+      setTimeout(() => {
+        window.location.reload(true);
+      }, 1500); // 1.5 seconds delay
+      toast.success("Company profile updated successfully");
     } catch (error) {
       console.error("Profile update error:", error.response?.status, error.response?.data);
       

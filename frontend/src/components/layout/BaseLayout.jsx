@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 import { getCookie } from "../../utils/cookieUtils";
 import { Helmet } from "react-helmet";
+import appConfig from "../../config/appConfig";
 
 const getCurrentYear = () => {
   return new Date().getFullYear();
@@ -31,9 +32,9 @@ const BaseLayout = ({ children }) => {
   return (
     <div className="min-h-screen flex flex-col bg-gray-50">
       <Helmet>
-        <title>VoxLyne - Secure Document Management</title>
+        <title>{appConfig.APP_NAME} - Secure Document Management</title>
         <link rel="icon" type="image/svg+xml" href={require("../../assets/logo.svg").default} />
-        <meta name="description" content="VoxLyne - Secure management of your professional history and documents" />
+        <meta name="description" content={`${appConfig.APP_NAME} - ${appConfig.APP_DESCRIPTION}`} />
       </Helmet>
 
       {/* Header */}
@@ -43,11 +44,11 @@ const BaseLayout = ({ children }) => {
             <Link to="/" className="flex items-center group">
               <img
                 src={require("../../assets/logo.svg").default}
-                alt="VoxLyne Logo"
+                alt={`${appConfig.APP_NAME} Logo`}
                 className="w-10 h-10 mr-3 transform group-hover:scale-110 transition-transform duration-200"
               />
               <h1 className="text-2xl font-bold text-gray-900 mb-0 group-hover:text-indigo-600 transition-colors">
-                VoxLyne
+                {appConfig.APP_NAME}
               </h1>
             </Link>
           </div>
@@ -176,13 +177,13 @@ const BaseLayout = ({ children }) => {
         <div className="container mx-auto px-4">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
             <div>
-              <h3 className="text-lg font-semibold mb-4">VoxLyne</h3>
+              <h3 className="text-lg font-semibold mb-4">{appConfig.APP_NAME}</h3>
               <p className="text-gray-300 mb-4">
-                Secure management of your professional history and documents.
+                {appConfig.APP_DESCRIPTION}
               </p>
               <div className="flex space-x-4">
                 <a
-                  href="https://www.facebook.com/RockIsLife"
+                  href={appConfig.SOCIAL_LINKS.facebook}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-gray-300 hover:text-white transition-colors"
@@ -196,7 +197,7 @@ const BaseLayout = ({ children }) => {
                   </svg>
                 </a>
                 <a
-                  href="https://x.com/Dmwgj97"
+                  href={appConfig.SOCIAL_LINKS.twitter}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-gray-300 hover:text-white transition-colors"
@@ -210,7 +211,7 @@ const BaseLayout = ({ children }) => {
                   </svg>
                 </a>
                 <a
-                  href="https://www.youtube.com/@rich4rdfox"
+                  href={appConfig.SOCIAL_LINKS.youtube}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-gray-300 hover:text-white transition-colors"
@@ -224,7 +225,7 @@ const BaseLayout = ({ children }) => {
                   </svg>
                 </a>
                 <a
-                  href="https://www.instagram.com/rockislife_co/"
+                  href={appConfig.SOCIAL_LINKS.instagram}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-gray-300 hover:text-white transition-colors"
@@ -337,9 +338,9 @@ const BaseLayout = ({ children }) => {
                     />
                   </svg>
                   <span className="text-gray-300">
-                    123 Business Ave, Suite 100
+                    {appConfig.CONTACT_ADDRESS.street}
                     <br />
-                    New York, NY 10001
+                    {`${appConfig.CONTACT_ADDRESS.city}, ${appConfig.CONTACT_ADDRESS.state} ${appConfig.CONTACT_ADDRESS.zipCode}`}
                   </span>
                 </li>
                 <li className="flex items-center">
@@ -357,10 +358,10 @@ const BaseLayout = ({ children }) => {
                     />
                   </svg>
                   <a
-                    href="mailto:info@voxlyne.com"
+                    href={`mailto:${appConfig.CONTACT_EMAIL}`}
                     className="text-gray-300 hover:text-white transition-colors"
                   >
-                    info@voxlyne.com
+                    {appConfig.CONTACT_EMAIL}
                   </a>
                 </li>
                 <li className="flex items-center">
@@ -378,10 +379,10 @@ const BaseLayout = ({ children }) => {
                     />
                   </svg>
                   <a
-                    href="tel:+1234567890"
+                    href={`tel:${appConfig.CONTACT_PHONE}`}
                     className="text-gray-300 hover:text-white transition-colors"
                   >
-                    +1 (234) 567-890
+                    {appConfig.CONTACT_PHONE}
                   </a>
                 </li>
               </ul>
@@ -389,7 +390,7 @@ const BaseLayout = ({ children }) => {
           </div>
           <div className="border-t border-gray-700 mt-8 pt-6 flex flex-col md:flex-row justify-between items-center">
             <p className="text-gray-300 text-sm">
-              © {getCurrentYear()} VoxLyne. All rights reserved.
+              © {getCurrentYear()} {appConfig.APP_NAME}. All rights reserved.
             </p>
             <div className="flex space-x-4 mt-4 md:mt-0">
               <Link

@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import RegisterForm from "../components/auth/RegisterForm";
 import { useAuth } from "../context/AuthContext";
 import { toast } from "react-toastify";
+import appConfig from "../config/appConfig";
 
 const Register = () => {
   const navigate = useNavigate();
@@ -84,8 +85,8 @@ const Register = () => {
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col justify-center items-center py-12 px-4 sm:px-6 lg:px-8">
       <div className="flex flex-col items-center mb-8">
-        <img src="/logo192.png" alt="VoxLyne Logo" className="w-20 h-20 mb-4" />
-        <h1 className="text-4xl font-bold text-gray-900">VoxLyne</h1>
+        <img src="../assets/logo.svg" alt={appConfig.APP_NAME + " Logo"} className="w-20 h-20 mb-4" />
+        <h1 className="text-4xl font-bold text-gray-900">{appConfig.APP_NAME}</h1>
         <p className="mt-2 text-center text-gray-600">
           Create your account to manage your work history
         </p>

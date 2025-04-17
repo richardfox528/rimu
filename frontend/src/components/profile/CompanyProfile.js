@@ -13,46 +13,46 @@ const CompanyProfile = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    fetchProfile();
-  }, []);
-
-  const fetchProfile = async () => {
-    try {
-      const token = localStorage.getItem("token") || getCookie("token");
-      
-      if (!token) {
-        toast.error("No authentication token found");
-        setLoading(false);
-        return;
-      }
-
-      console.log("Token found:", token ? "Yes" : "No");
-      
-      const response = await axios.get(
-        getApiUrl("api/accounts/user/info/"),
-        {
-          headers: { 
-            Authorization: `Bearer ${token}`,
-            'Content-Type': 'application/json',
-          },
+    const fetchProfile = async () => {
+      try {
+        const token = localStorage.getItem("token") || getCookie("token");
+        
+        if (!token) {
+          toast.error("No authentication token found");
+          setLoading(false);
+          return;
         }
-      );
 
-      // Verify if the user is a company
-      if (response.data.user_type !== 1) {
-        toast.error("Unauthorized: This profile is only for company accounts");
-        navigate("/user-dashboard");
-        return;
+        console.log("Token found:", token ? "Yes" : "No");
+        
+        const response = await axios.get(
+          getApiUrl("api/accounts/user/info/"),
+          {
+            headers: { 
+              Authorization: `Bearer ${token}`,
+              'Content-Type': 'application/json',
+            },
+          }
+        );
+
+        // Verify if the user is a company
+        if (response.data.user_type !== 1) {
+          toast.error("Unauthorized: This profile is only for company accounts");
+          navigate("/user-dashboard");
+          return;
+        }
+
+        setProfile(response.data);
+      } catch (error) {
+        console.error("Profile fetch error:", error.response?.status, error.response?.data);
+        toast.error(error.response?.data?.detail || "Error loading company profile");
+      } finally {
+        setLoading(false);
       }
+    };
 
-      setProfile(response.data);
-    } catch (error) {
-      console.error("Profile fetch error:", error.response?.status, error.response?.data);
-      toast.error(error.response?.data?.detail || "Error loading company profile");
-    } finally {
-      setLoading(false);
-    }
-  };
+    fetchProfile();
+  }, [navigate]);
 
   if (loading) {
     return (

@@ -1,6 +1,7 @@
 import React from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
+import appConfig from "../../config/appConfig";
 
 const UserNavigation = () => {
   const { user, logout } = useAuth();
@@ -34,7 +35,7 @@ const UserNavigation = () => {
                     d="M5.121 17.804A13.937 13.937 0 0112 16c2.5 0 4.847.655 6.879 1.804M15 10a3 3 0 11-6 0 3 3 0 016 0zm6 2a9 9 0 11-18 0 9 9 0 0118 0z"
                   />
                 </svg>
-                VoxLyne Personal
+                {appConfig.APP_NAME} Personal
               </Link>
             </div>
             <div className="hidden md:block">

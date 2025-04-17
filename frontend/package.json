@@ -1,5 +1,5 @@
 {
-  "name": "laboralhistory-frontend",
+  "name": "RIMU",
   "version": "1.0.0",
   "private": true,
   "dependencies": {
@@ -8,12 +8,14 @@
     "@testing-library/user-event": "^14.6.1",
     "axios": "^1.8.2",
     "js-cookie": "^3.0.5",
+    "leaflet": "^1.9.4",
     "nth-check": "^2.1.1",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-google-recaptcha": "^3.1.0",
     "react-helmet": "^6.1.0",
     "react-hot-toast": "^2.5.2",
+    "react-leaflet": "^5.0.0",
     "react-phone-input-2": "^2.15.1",
     "react-router-dom": "^7.3.0",
     "react-scripts": "^5.0.1",

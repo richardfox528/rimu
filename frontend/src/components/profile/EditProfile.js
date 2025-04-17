@@ -88,8 +88,12 @@ const EditProfile = () => {
         }
       );
 
-      toast.success("Profile updated successfully");
       navigate("/profile");
+      // Add delay before refresh to show the toast
+      setTimeout(() => {
+        window.location.reload(true);
+      }, 1500); // 1.5 seconds delay
+      toast.success("Profile updated successfully");
     } catch (error) {
       console.error("Profile update error:", error.response?.status, error.response?.data);
       

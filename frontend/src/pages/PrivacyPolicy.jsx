@@ -1,12 +1,13 @@
 import React from 'react';
 import { Helmet } from 'react-helmet';
+import appConfig from '../config/appConfig';
 
 const PrivacyPolicy = () => {
   return (
     <>
       <Helmet>
-        <title>Privacy Policy - VoxLyne</title>
-        <meta name="description" content="VoxLyne's Privacy Policy - Learn how we protect and manage your data" />
+        <title>Privacy Policy - {appConfig.APP_NAME}</title>
+        <meta name="description" content={`${appConfig.APP_NAME}'s Privacy Policy - Learn how we protect and manage your data`} />
       </Helmet>
       
       <div className="container mx-auto px-4 py-8">
@@ -64,8 +65,8 @@ const PrivacyPolicy = () => {
             <p className="text-gray-600">
               If you have any questions about this Privacy Policy, please contact us at:
               <br />
-              <a href="mailto:privacy@voxlyne.com" className="text-indigo-600 hover:text-indigo-800">
-                privacy@voxlyne.com
+              <a href={`mailto:${appConfig.PRIVACY_EMAIL}`} className="text-indigo-600 hover:text-indigo-800">
+                {appConfig.PRIVACY_EMAIL}
               </a>
             </p>
           </section>

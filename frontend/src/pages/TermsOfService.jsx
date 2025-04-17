@@ -1,12 +1,13 @@
 import React from 'react';
 import { Helmet } from 'react-helmet';
+import appConfig from '../config/appConfig';
 
 const TermsOfService = () => {
   return (
     <>
       <Helmet>
-        <title>Terms of Service - VoxLyne</title>
-        <meta name="description" content="VoxLyne's Terms of Service - Understanding our service agreement" />
+        <title>Terms of Service - {appConfig.APP_NAME}</title>
+        <meta name="description" content={`${appConfig.APP_NAME}'s Terms of Service - Understanding our service agreement`} />
       </Helmet>
       
       <div className="container mx-auto px-4 py-8">
@@ -16,14 +17,14 @@ const TermsOfService = () => {
           <section className="mb-8">
             <h2 className="text-2xl font-semibold text-gray-800 mb-4">1. Acceptance of Terms</h2>
             <p className="text-gray-600 mb-4">
-              By accessing and using VoxLyne's services, you accept and agree to be bound by the terms and conditions outlined in this agreement. If you do not agree to these terms, please do not use our services.
+              By accessing and using {appConfig.APP_NAME}'s services, you accept and agree to be bound by the terms and conditions outlined in this agreement. If you do not agree to these terms, please do not use our services.
             </p>
           </section>
 
           <section className="mb-8">
             <h2 className="text-2xl font-semibold text-gray-800 mb-4">2. Description of Service</h2>
             <p className="text-gray-600 mb-4">
-              VoxLyne provides a platform for secure document management and professional history verification. Our services include:
+              {appConfig.APP_NAME} provides a platform for secure document management and professional history verification. Our services include:
             </p>
             <ul className="list-disc pl-6 text-gray-600">
               <li>Document storage and management</li>
@@ -49,14 +50,14 @@ const TermsOfService = () => {
           <section className="mb-8">
             <h2 className="text-2xl font-semibold text-gray-800 mb-4">4. Intellectual Property</h2>
             <p className="text-gray-600 mb-4">
-              All content and materials available on VoxLyne, including but not limited to text, graphics, website name, code, images, and logos are the intellectual property of VoxLyne and are protected by applicable copyright and trademark law.
+              All content and materials available on {appConfig.APP_NAME}, including but not limited to text, graphics, website name, code, images, and logos are the intellectual property of {appConfig.APP_NAME} and are protected by applicable copyright and trademark law.
             </p>
           </section>
 
           <section className="mb-8">
             <h2 className="text-2xl font-semibold text-gray-800 mb-4">5. Limitation of Liability</h2>
             <p className="text-gray-600 mb-4">
-              VoxLyne shall not be liable for any indirect, incidental, special, consequential, or punitive damages, including without limitation, loss of profits, data, use, goodwill, or other intangible losses.
+              {appConfig.APP_NAME} shall not be liable for any indirect, incidental, special, consequential, or punitive damages, including without limitation, loss of profits, data, use, goodwill, or other intangible losses.
             </p>
           </section>
 
@@ -72,8 +73,8 @@ const TermsOfService = () => {
             <p className="text-gray-600">
               If you have any questions about these Terms of Service, please contact us at:
               <br />
-              <a href="mailto:legal@voxlyne.com" className="text-indigo-600 hover:text-indigo-800">
-                legal@voxlyne.com
+              <a href={`mailto:${appConfig.LEGAL_EMAIL}`} className="text-indigo-600 hover:text-indigo-800">
+                {appConfig.LEGAL_EMAIL}
               </a>
             </p>
           </section>

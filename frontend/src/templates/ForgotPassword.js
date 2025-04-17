@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { getApiUrl } from "../utils/config.js";
+import appConfig from "../config/appConfig";
 
 const ForgotPasswordTemplate = `
 <!DOCTYPE html>
@@ -31,7 +32,7 @@ const ForgotPasswordTemplate = `
     </p>
     <p>If you did not request this password reset, you can ignore this email.</p>
     <p>This link will expire in 15 minutes.</p>
-    <p>Best regards,<br>The VoxLyne team.</p>
+    <p>Best regards,<br>The ${appConfig.APP_NAME} team.</p>
   </div>
   <div class="footer">
     <p>This is an automatic email, please do not reply to this message.</p>

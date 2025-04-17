@@ -1,7 +1,23 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import { MapContainer, TileLayer, Marker, Popup, LayersControl } from "react-leaflet";
+import "leaflet/dist/leaflet.css";
+import "../styles/map.css";
+import L from "leaflet";
+import appConfig from "../config/appConfig";
+
+// Fix for default marker icon in production
+delete L.Icon.Default.prototype._getIconUrl;
+L.Icon.Default.mergeOptions({
+  iconRetinaUrl: require("leaflet/dist/images/marker-icon-2x.png"),
+  iconUrl: require("leaflet/dist/images/marker-icon.png"),
+  shadowUrl: require("leaflet/dist/images/marker-shadow.png"),
+});
 
 const Contact = () => {
+  // Coordinates for Bogotá (approximately city center)
+  const bogotaPosition = [4.6097, -74.0817];
+
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Hero Section */}
@@ -136,9 +152,9 @@ const Contact = () => {
                           Address
                         </h3>
                         <p className="text-gray-600">
-                          123 Business Ave, Suite 100
-                          <br />
-                          Madrid, Spain 28001
+                        {appConfig.CONTACT_ADDRESS.street}
+                        <br />
+                        {`${appConfig.CONTACT_ADDRESS.city}, ${appConfig.CONTACT_ADDRESS.state} ${appConfig.CONTACT_ADDRESS.zipCode}`}
                         </p>
                       </div>
                     </div>
@@ -165,10 +181,10 @@ const Contact = () => {
                         </h3>
                         <p className="text-gray-600">
                           <a
-                            href="tel:+34911234567"
+                            href={`tel:${appConfig.CONTACT_PHONE}`}
                             className="hover:text-primary transition-colors"
                           >
-                            +34 911 234 567
+                            {appConfig.CONTACT_PHONE}
                           </a>
                         </p>
                       </div>
@@ -196,10 +212,10 @@ const Contact = () => {
                         </h3>
                         <p className="text-gray-600">
                           <a
-                            href="mailto:info@laboralhistory.com"
+                            href={`mailto:${appConfig.CONTACT_EMAIL}`}
                             className="hover:text-primary transition-colors"
                           >
-                            info@laboralhistory.com
+                            {appConfig.CONTACT_EMAIL}
                           </a>
                         </p>
                       </div>
@@ -250,39 +266,79 @@ const Contact = () => {
               Our Location
             </h2>
             <p className="text-xl text-gray-600">
-              Visit our headquarters in Madrid
+              Visit our headquarters in Bogotá
             </p>
           </div>
 
           <div className="max-w-6xl mx-auto">
             <div className="rounded-2xl shadow-soft hover:shadow-medium transition-all duration-300 border border-gray-100 hover:border-primary/20 bg-white overflow-hidden">
-              {/* Placeholder for map - in a real implementation, this would be an actual map component */}
-              <div className="bg-gray-200 w-full h-96 flex items-center justify-center">
-                <div className="text-center p-8">
-                  <svg
-                    className="w-16 h-16 text-gray-400 mx-auto mb-4"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"
+              <MapContainer
+                center={bogotaPosition}
+                zoom={13}
+                scrollWheelZoom={true}
+                style={{ height: "400px", width: "100%" }}
+                className="z-10"
+                zoomControl={true}
+                dragging={true}
+                touchZoom={true}
+                doubleClickZoom={true}
+                boxZoom={true}
+              >
+                <LayersControl position="topright">
+                  {/* Base Layers */}
+                  <LayersControl.BaseLayer checked name="Street Map">
+                    <TileLayer
+                      attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                      url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                      maxZoom={19}
                     />
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
+                  </LayersControl.BaseLayer>
+
+                  <LayersControl.BaseLayer name="Satellite">
+                    <TileLayer
+                      attribution='&copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'
+                      url="https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}"
+                      maxZoom={19}
                     />
-                  </svg>
-                  <p className="text-gray-600 text-lg font-medium">
-                    Location map - Integration with Google Maps
-                  </p>
-                </div>
-              </div>
+                  </LayersControl.BaseLayer>
+
+                  <LayersControl.BaseLayer name="Terrain">
+                    <TileLayer
+                      attribution='Tiles &copy; Esri &mdash; Source: USGS, Esri, TANA, DeLorme, and NPS'
+                      url="https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}"
+                      maxZoom={19}
+                    />
+                  </LayersControl.BaseLayer>
+
+                  <LayersControl.BaseLayer name="Topographic">
+                    <TileLayer
+                      attribution='Map data: &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, SRTM | Map style: &copy; <a href="https://opentopomap.org">OpenTopoMap</a>'
+                      url="https://c.tile.opentopomap.org/{z}/{x}/{y}.png"
+                      maxZoom={17}
+                    />
+                  </LayersControl.BaseLayer>
+
+                  {/* Overlay Layers */}
+                  <LayersControl.Overlay name="Hillshade">
+                    <TileLayer
+                      attribution='Hillshade &copy; <a href="https://www.opentopomap.org">OpenTopoMap</a>'
+                      url="https://tiles.wmflabs.org/hillshading/{z}/{x}/{y}.png"
+                      maxZoom={17}
+                      opacity={0.5}
+                    />
+                  </LayersControl.Overlay>
+                </LayersControl>
+
+                <Marker position={bogotaPosition}>
+                  <Popup>
+                    <div className="text-center">
+                      <strong className="block mb-1">{appConfig.APP_NAME}</strong>
+                      <span className="block text-sm">{appConfig.CONTACT_ADDRESS.street}</span>
+                      <span className="block text-sm">{`${appConfig.CONTACT_ADDRESS.city}, ${appConfig.CONTACT_ADDRESS.state}`}</span>
+                    </div>
+                  </Popup>
+                </Marker>
+              </MapContainer>
             </div>
           </div>
         </div>
@@ -360,7 +416,7 @@ const Contact = () => {
                 Register Now
               </Link>
               <a
-                href="mailto:info@laboralhistory.com"
+                href={`mailto:${appConfig.CONTACT_EMAIL}`}
                 className="px-8 py-3 bg-transparent border-2 border-white text-white font-semibold rounded-xl hover:bg-white/10 transition-all duration-300 text-center transform hover:-translate-y-1 hover:scale-105 hover:shadow-soft"
               >
                 Send Email
