@@ -270,7 +270,7 @@ const RegisterForm = ({ onRegister }) => {
       </h2>
 
       {error && (
-        <div className="bg-red-50 text-red-500 p-3 rounded-lg text-sm mb-4">
+        <div data-testid="error-container" className="bg-red-50 text-red-500 p-3 rounded-lg text-sm mb-4">
           {error}
         </div>
       )}

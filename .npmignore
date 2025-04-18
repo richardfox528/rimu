@@ -1,1 +1,13 @@
+node_modules/
+venv/
+__pycache__/
+.cursor/
+*.pyc
+*.pyo
+*.pyd
+*.sqlite3
 .env
+test-report.xml
+junit.xml
+coverage/
+reports/
