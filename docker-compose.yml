@@ -7,7 +7,19 @@ services:
       - ./backend:/code
     environment:
       - DJANGO_SETTINGS_MODULE=voxlyne.settings
+    depends_on:
+      - redis
   frontend:
     build: ./frontend/src
     ports:
       - "3000:80"
+
+  redis:
+    image: redis:alpine
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+
+volumes:
+  redis_data:

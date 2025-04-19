@@ -69,7 +69,7 @@ This project utilizes a Python/Django backend and a React frontend. It supports 
 1.  **Clone the repository:**
     ```powershell
     git clone https://github.com/richardfox528/rimu.git
-    cd LaboralHistory
+    cd rimu
     ```
     *(Note: Changed `cd LaboralHistory` to `cd rimu` based on the clone URL. Adjust if your local folder name is different.)*
 
