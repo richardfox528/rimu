@@ -11,6 +11,8 @@ from .forms import DocumentForm
 from .pdf_utils import create_pdf_with_metadata
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.renderers import JSONRenderer, BrowsableAPIRenderer
+from django.views.decorators.cache import cache_page
+from django.core.cache import cache
 
 
 # Create your views here.
@@ -63,30 +65,13 @@ class DocumentListCreateView(generics.ListCreateAPIView):
     - POST: Create a new document (authentication required)
     """
 
-    queryset = Document.objects.all()
+    queryset = Document.objects.select_related('employee', 'company').all().order_by('id')
     serializer_class = DocumentSerializer
 
     def get_permissions(self):
         if self.request.method == "GET":
             return [AllowAny()]
         return [IsAuthenticated()]
-
-    def get(self, request, *args, **kwargs):
-        """Handle GET requests for documents.
-
-        Retrieves all documents and returns them in a serialized format.
-
-        Args:
-            request: The HTTP request object.
-            *args: Variable length argument list.
-            **kwargs: Arbitrary keyword arguments.
-
-        Returns:
-            Response: JSON response containing the serialized documents data.
-        """
-        documents = Document.objects.all()
-        documents_serializer = DocumentSerializer(documents, many=True)
-        return Response(documents_serializer.data)
 
     def post(self, request, *args, **kwargs):
         """Handle POST requests to create a document.
@@ -134,7 +119,7 @@ class DocumentDetailView(generics.RetrieveUpdateDestroyAPIView):
     - DELETE: Remove a document (authentication required)
     """
 
-    queryset = Document.objects.all()
+    queryset = Document.objects.select_related('employee', 'company').all()
     serializer_class = DocumentSerializer
 
     def get_permissions(self):
@@ -183,6 +168,7 @@ def create_document(request):
     return render(request, "create_document.html", {"form": form})
 
 
+@cache_page(60 * 15)
 @api_view(["GET"])
 @permission_classes([AllowAny])
 def get_documents_by_company(request, company_id):
@@ -214,6 +200,7 @@ def get_documents_by_company(request, company_id):
     return Response(documents_data, status=status.HTTP_200_OK)
 
 
+@cache_page(60 * 15)
 @api_view(["GET"])
 @permission_classes([AllowAny])
 def document_detail(request, identifier):
@@ -249,10 +236,27 @@ def document_detail(request, identifier):
 class DocumentViewSet(viewsets.ModelViewSet):
     """API endpoint to manage documents."""
 
-    queryset = Document.objects.all()
+    queryset = Document.objects.select_related('employee', 'company').all().order_by('id')
     serializer_class = DocumentSerializer
     renderer_classes = [JSONRenderer, BrowsableAPIRenderer]
     permission_classes = [AllowAny]
+
+    def list(self, request, *args, **kwargs):
+        """Handle GET list requests, checking cache first."""
+        cache_key = 'Documents:cache:viewset_list'
+        cached_data = cache.get(cache_key)
+
+        if cached_data:
+            print(f"Cache hit for {cache_key}")
+            return Response(cached_data)
+
+        print(f"Cache miss for {cache_key}")
+        response = super().list(request, *args, **kwargs)
+
+        if response.status_code == 200:
+            cache.set(cache_key, response.data, timeout=300)
+
+        return response
 
 
 class DocumentTypeViewSet(viewsets.ModelViewSet):

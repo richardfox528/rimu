@@ -4,6 +4,7 @@ from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from .models import EmploymentHistory
 from .serializers import EmploymentHistorySerializer
+from django.core.cache import cache
 
 
 # Create your views here.
@@ -17,7 +18,7 @@ class EmploymentHistoryListCreateView(generics.ListCreateAPIView):
     Creates a new employment history (requires authentication).
     """
 
-    queryset = EmploymentHistory.objects.all()
+    queryset = EmploymentHistory.objects.select_related('employee', 'company').all()
     serializer_class = EmploymentHistorySerializer
 
     def get_permissions(self):
@@ -25,24 +26,25 @@ class EmploymentHistoryListCreateView(generics.ListCreateAPIView):
             return [AllowAny()]
         return [IsAuthenticated()]
 
-    def get(self, request, *args, **kwargs):
-        """Handle GET requests for employment history.
+    def list(self, request, *args, **kwargs):
+        """Handle GET list requests, checking cache first."""
+        cache_key = 'Employment_history:cache:list_view' # Updated key format
+        cached_data = cache.get(cache_key)
 
-        Retrieves all employment history records and returns them in a serialized format.
+        if cached_data:
+            print(f"Cache hit for {cache_key}")
+            # See comment in Companies/views.py regarding returning cached data directly
+            return Response(cached_data)
 
-        Args:
-            request: The HTTP request object.
-            *args: Variable length argument list.
-            **kwargs: Arbitrary keyword arguments.
+        print(f"Cache miss for {cache_key}")
+        # Call the original list method
+        response = super().list(request, *args, **kwargs)
 
-        Returns:
-            Response: JSON response containing the serialized employment history data.
-        """
-        employment_history = EmploymentHistory.objects.all()
-        employment_history_serializer = EmploymentHistorySerializer(
-            employment_history, many=True
-        )
-        return Response(employment_history_serializer.data)
+        # Cache the data part of the response
+        if response.status_code == 200:
+            cache.set(cache_key, response.data, timeout=300)
+
+        return response
 
 
 class EmploymentHistoryDetailView(generics.RetrieveUpdateDestroyAPIView):
@@ -58,7 +60,8 @@ class EmploymentHistoryDetailView(generics.RetrieveUpdateDestroyAPIView):
     Deletes an employment history (requires authentication).
     """
 
-    queryset = EmploymentHistory.objects.all()
+    # Add select_related for optimization
+    queryset = EmploymentHistory.objects.select_related('employee', 'company').all()
     serializer_class = EmploymentHistorySerializer
 
     def get_permissions(self):

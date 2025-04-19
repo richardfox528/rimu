@@ -29,6 +29,7 @@ This project utilizes a Python/Django backend and a React frontend. It supports 
 
 *   **Backend:** Python, Django
 *   **Frontend:** React, React Router (for navigation), Tailwind CSS (for styling)
+*   **Cache/Message Broker:** Redis (for task queuing, caching, and session management)
 *   **Development:** Node.js/npm (for frontend dependencies and running the dev server)
 *   **Containerization:** Docker, Docker Compose
 *   **Environment Variables:** Managed via `.env` file (see `.env.example` for required variables)
@@ -61,15 +62,79 @@ This project utilizes a Python/Django backend and a React frontend. It supports 
 
 *   Python 3.x
 *   Node.js and npm
+*   Redis Server (installed in WSL for Windows or natively on Linux/Mac)
 *   Docker and Docker Compose (Optional, for containerized deployment/development)
+*   Windows Subsystem for Linux (WSL) if on Windows
 *   Git
+
+## 🔄 Redis Setup
+
+Redis is used for caching, session management, and message queuing in this project. The application will automatically check for and attempt to start Redis when the Django server starts.
+
+### Installing Redis
+
+#### For Windows (using WSL):
+
+1. **Enable WSL if not already installed:**
+   ```powershell
+   # Run PowerShell as Administrator
+   wsl --install
+   ```
+
+2. **Install Redis in WSL:**
+   ```bash
+   # Inside WSL terminal
+   sudo apt update
+   sudo apt install redis-server
+   ```
+
+3. **Start Redis service:**
+   ```bash
+   sudo service redis-server start
+   ```
+
+4. **Verify Redis is running:**
+   ```bash
+   redis-cli ping
+   ```
+   
+   If Redis is running, it should return: `PONG`
+
+#### For macOS (using Homebrew):
+
+```bash
+brew install redis
+brew services start redis
+```
+
+#### For Linux:
+
+```bash
+sudo apt update
+sudo apt install redis-server
+sudo systemctl start redis-server
+```
+
+#### Using Docker:
+
+Redis is automatically included in the Docker Compose configuration. No additional setup is required when using Docker.
+
+### Automatic Redis Management
+
+The Django application is configured to:
+
+1. Automatically check if Redis is running when starting the server
+2. Attempt to start Redis if it's not running (you'll be prompted for your sudo password in WSL)
+3. Keep WSL running in the background while the Django server is active (Windows only)
+
+If Redis can't be started automatically, you'll receive instructions on how to start it manually.
 
 ## 🚀 Setup and Installation
 
 1.  **Clone the repository:**
     ```powershell
     git clone https://github.com/richardfox528/rimu.git
-    cd LaboralHistory
+    cd rimu
     ```
     *(Note: Changed `cd LaboralHistory` to `cd rimu` based on the clone URL. Adjust if your local folder name is different.)*
 
@@ -81,6 +146,9 @@ This project utilizes a Python/Django backend and a React frontend. It supports 
 
     # Install Python dependencies (assuming requirements.txt is in ./backend)
     pip install -r backend/requirements.txt
+    
+    # Install colorama for better console output
+    pip install colorama
     ```
     *Note: If `requirements.txt` is missing or elsewhere, update the path or create the file.*
 
@@ -122,6 +190,7 @@ This method uses the `run_dev_server.py` script to start both the Django backend
 
     *   The Django backend will typically run on `http://localhost:8000`.
     *   The React frontend will typically run on `http://localhost:3000`.
+    *   The system will automatically check if Redis is running and try to start it if needed.
 
 3.  Press `Ctrl+C` in the terminal where the script is running to stop both servers.
 
@@ -139,6 +208,7 @@ This method builds and runs the application using Docker containers as defined i
 
     *   The Django backend service (`web`) will be accessible on `http://localhost:8000`.
     *   The Frontend service (`frontend`) will be accessible on `http://localhost:3000`.
+    *   Redis will be automatically started as a service in Docker.
 
 3.  **To stop the services:**
     ```powershell

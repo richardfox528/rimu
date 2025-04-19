@@ -24,6 +24,7 @@ from rest_framework.permissions import AllowAny
 from Accounts.views import UserListCreateView, UserDetailView
 from .views import *
 from .api_docs import API_DESCRIPTIONS
+import debug_toolbar
 
 urlpatterns = [
     path("", index, name="index-view"),
@@ -91,6 +92,9 @@ urlpatterns = [
 ]
 
 if settings.DEBUG:
+    urlpatterns = [
+        path('__debug__/', include(debug_toolbar.urls)),
+    ] + urlpatterns
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
     urlpatterns += [
         path("api-auth/", include("rest_framework.urls")),
